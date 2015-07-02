@@ -42,6 +42,46 @@ public class HtmlTopAnatDisplay extends HtmlParentDisplay implements TopAnatDisp
     
 
     @Override
+    public void displayTopAnatPage() {
+        log.entry();
+
+        this.startDisplay("topAnat: enrichment of gene expression localization");
+        
+        //AngularJs container
+        this.writeln("<div ng-app='phonecatApp' ng-controller='PhoneListCtrl'>");
+        
+        this.writeln("<p>Query input is: {{query}}</p>");
+        
+        this.writeln("<div class='container-fluid'>");
+        this.writeln("<div class='row'>");
+        
+        this.writeln("<div class='col-md-2'>"
+                    + "<!--Sidebar content-->"
+                    + "Search: <input ng-model='query'>"
+                + "</div>");
+        
+        this.writeln("<div class='col-md-10'>"
+                    + "<!--Body content-->"
+                    + "<ul class='phones'>"
+                        + "<li ng-repeat='phone in phones | filter:query'>"
+                        + "<span>{{phone.name}}</span>"
+                        + "<p>{{phone.snippet}}</p>"
+                        + "</li>"
+                    + "</ul>"
+                + "</div>");
+        
+        this.writeln("</div>");       //end div class='row'
+        this.writeln("</div>");   //end div class='container-fluid'
+        
+        this.writeln("</div>"); //end AngularJs container
+
+        this.endDisplay();
+        
+        log.exit();
+    }
+
+
+    @Override
     protected void includeJs() {
         log.entry();
         super.includeJs();

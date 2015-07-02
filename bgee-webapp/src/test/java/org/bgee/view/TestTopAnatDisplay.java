@@ -23,5 +23,10 @@ public class TestTopAnatDisplay extends TestParentDisplay implements TopAnatDisp
         super(response, requestParameters, prop, factory);
         // TODO Auto-generated constructor stub
     }
+
+    @Override
+    public void displayTopAnatPage() {
+        this.out.println("Test topAnat container");
+    }
     
 }

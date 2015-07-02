@@ -9,4 +9,8 @@ package org.bgee.view;
  */
 public interface TopAnatDisplay {
     
+    /**
+     * Display the topAnat container.
+     */
+    public void displayTopAnatPage();
 }

@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bgee.controller.exception.PageNotFoundException;
+import org.bgee.view.TopAnatDisplay;
 import org.bgee.view.ViewFactory;
 
 /**
@@ -40,6 +42,15 @@ public class CommandTopAnat extends CommandParent {
     @Override
     public void processRequest() throws Exception {
         log.entry();
+        
+        TopAnatDisplay display = this.viewFactory.getTopAnatDisplay();
+        if (this.requestParameters.getAction() == null) {
+            display.displayTopAnatPage();
+        } else {
+            throw log.throwing(new PageNotFoundException("Incorrect " + 
+                this.requestParameters.getUrlParametersInstance().getParamAction() + 
+                " parameter value."));
+        }
 
         log.exit();
     }
