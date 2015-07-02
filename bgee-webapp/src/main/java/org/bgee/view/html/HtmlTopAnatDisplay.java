@@ -40,4 +40,19 @@ public class HtmlTopAnatDisplay extends HtmlParentDisplay implements TopAnatDisp
         super(response, requestParameters, prop, factory);
     }
     
+
+    @Override
+    protected void includeJs() {
+        log.entry();
+        super.includeJs();
+        this.includeJs("topanat.js");
+        log.exit();
+    }
+    @Override
+    protected void includeCss() {
+        log.entry();
+        super.includeCss();
+        this.includeCss("topanat.css");
+        log.exit();
+    }
 }
