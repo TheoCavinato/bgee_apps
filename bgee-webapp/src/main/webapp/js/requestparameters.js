@@ -604,7 +604,7 @@ function requestParameters(queryString, encodeUrl, parametersSeparator){
      */
     this.isXmlDisplayType = function() {
         if(this.getFirstValue(urlParameters.getParamDisplayType()) != null &&
-                this.getFirstValue(urlParameters.getParamDisplayType()) == this.DISPLAY_TYPE_XML){
+                this.getFirstValue(urlParameters.getParamDisplayType()) == this.DISPLAY_TYPE_XML()){
             return true;
         }
         return false;
@@ -614,7 +614,7 @@ function requestParameters(queryString, encodeUrl, parametersSeparator){
      */
     this.isCsvDisplayType = function() {
         if(this.getFirstValue(urlParameters.getParamDisplayType()) != null &&
-                this.getFirstValue(urlParameters.getParamDisplayType()) == this.DISPLAY_TYPE_CSV){
+                this.getFirstValue(urlParameters.getParamDisplayType()) == this.DISPLAY_TYPE_CSV()){
             return true;
         }
         return false;
@@ -624,7 +624,7 @@ function requestParameters(queryString, encodeUrl, parametersSeparator){
      */
     this.isTsvDisplayType = function() {
         if(this.getFirstValue(urlParameters.getParamDisplayType()) != null &&
-                this.getFirstValue(urlParameters.getParamDisplayType()) == this.DISPLAY_TYPE_TSV){
+                this.getFirstValue(urlParameters.getParamDisplayType()) == this.DISPLAY_TYPE_TSV()){
             return true;
         }
         return false;
@@ -634,7 +634,7 @@ function requestParameters(queryString, encodeUrl, parametersSeparator){
      */
     this.isJsonDisplayType = function() {
         if(this.getFirstValue(urlParameters.getParamDisplayType()) != null &&
-                this.getFirstValue(urlParameters.getParamDisplayType()) == this.DISPLAY_TYPE_JSON){
+                this.getFirstValue(urlParameters.getParamDisplayType()) == this.DISPLAY_TYPE_JSON()){
             return true;
         }
         return false;
@@ -667,7 +667,7 @@ function requestParameters(queryString, encodeUrl, parametersSeparator){
     this.isAnAboutPageCategory = function()
     {
         if (this.getFirstValue(urlParameters.getParamPage()) != null && 
-                this.getFirstValue(urlParameters.getParamPage()) == this.PAGE_ABOUT) {
+                this.getFirstValue(urlParameters.getParamPage()) == this.PAGE_ABOUT()) {
             return true;
         }
         return false;
@@ -691,7 +691,7 @@ function requestParameters(queryString, encodeUrl, parametersSeparator){
     this.isADocumentationPageCategory = function()
     {
         if (this.getFirstValue(urlParameters.getParamPage()) != null && 
-                this.getFirstValue(urlParameters.getParamPage()) == this.PAGE_DOCUMENTATION) {
+                this.getFirstValue(urlParameters.getParamPage()) == this.PAGE_DOCUMENTATION()) {
             return true;
         }
         return false;
@@ -702,7 +702,7 @@ function requestParameters(queryString, encodeUrl, parametersSeparator){
      */
     this.isADownloadPageCategory = function(){
         if(this.getFirstValue(urlParameters.getParamPage()) != null &&
-                this.getFirstValue(urlParameters.getParamPage()) == this.PAGE_DOWNLOAD){
+                this.getFirstValue(urlParameters.getParamPage()) == this.PAGE_DOWNLOAD()){
             return true;
         }
         return false;
