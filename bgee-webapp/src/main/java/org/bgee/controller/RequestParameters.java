@@ -161,6 +161,27 @@ public class RequestParameters {
     public static final String ACTION_DOC_HOW_TO_ACCESS = "access";
     
     /**
+     * A {@code String} that is the value taken by the {@code displayType} parameter 
+     * (see {@link URLParameters#getParamDisplayType()}) to obtain a XML view.
+     */
+    public static final String DISPLAY_TYPE_XML = "xml";
+    /**
+     * A {@code String} that is the value taken by the {@code displayType} parameter 
+     * (see {@link URLParameters#getParamDisplayType()}) to obtain a CSV view.
+     */
+    public static final String DISPLAY_TYPE_CSV = "csv";
+    /**
+     * A {@code String} that is the value taken by the {@code displayType} parameter 
+     * (see {@link URLParameters#getParamDisplayType()}) to obtain a TSV view.
+     */
+    public static final String DISPLAY_TYPE_TSV = "tsv";
+    /**
+     * A {@code String} that is the value taken by the {@code displayType} parameter 
+     * (see {@link URLParameters#getParamDisplayType()}) to obtain a JSON view.
+     */
+    public static final String DISPLAY_TYPE_JSON = "json";
+    
+    /**
      * A {@code BgeeProperties} instance to provide all the properties values
      */
     private final BgeeProperties prop ;
@@ -465,15 +486,15 @@ public class RequestParameters {
                         try {
                             valueFromUrl = this.secureString(valueFromUrl, 
                                     parameter.getMaxSize(), parameter.getFormat());
+                            if(parameter.getType().equals(String.class)){
+                                parameterValues.add(valueFromUrl);
+                            } else if(parameter.getType().equals(Integer.class)){
+                                parameterValues.add(castToInt(valueFromUrl));
+                            } else if(parameter.getType().equals(Boolean.class)){
+                                parameterValues.add(castToBoolean(valueFromUrl));
+                            }
                         } catch (WrongFormatException e) {
-                            throw new WrongFormatException(parameter.getName());
-                        }
-                        if(parameter.getType().equals(String.class)){
-                            parameterValues.add(valueFromUrl);
-                        } else if(parameter.getType().equals(Integer.class)){
-                            parameterValues.add(Integer.valueOf(valueFromUrl));
-                        } else if(parameter.getType().equals(Boolean.class)){
-                            parameterValues.add(Boolean.valueOf(valueFromUrl));
+                            throw new WrongFormatException(parameter.getName(), e);
                         }
                     }
                     // store the list of values in the HashMap using
@@ -1043,7 +1064,7 @@ public class RequestParameters {
      *                                                  {@link URLParameters.Parameter}
      */    
     @SuppressWarnings("unchecked")
-    public <T> void addValue(URLParameters.Parameter<T> parameter, T value) 
+    protected <T> void addValue(URLParameters.Parameter<T> parameter, T value) 
             throws MultipleValuesNotAllowedException, WrongFormatException {
         log.entry(parameter,value);
 
@@ -1083,7 +1104,7 @@ public class RequestParameters {
      *  
      * @param parameter The {@code URLParameters.Parameter<T>} to reset
      */
-    public <T>  void resetValues(URLParameters.Parameter<T> parameter) 
+    protected <T>  void resetValues(URLParameters.Parameter<T> parameter) 
     {
         log.entry(parameter);
         this.values.put(parameter, null);
@@ -1170,29 +1191,6 @@ public class RequestParameters {
 
     /**
      * Convenient method to retrieve value of the parameter returned by 
-     * {@link URLParameters#getParamAction()}. Equivalent to calling 
-     * {@link #getFirstValue(Parameter)} for this parameter.
-     * 
-     * @return  A {@code String} that is the value of the {@code action} URL parameter. 
-     *          Can be {@code null}. 
-     */
-    public String getAction() {
-        return this.getFirstValue(this.getUrlParametersInstance().getParamAction());
-    }
-    /**
-     * Convenient method to set value of the parameter returned by 
-     * {@link URLParameters#getParamAction()}. Equivalent to calling 
-     * {@link #addValue(Parameter, Object)} for this parameter.
-     * 
-     * @param action    A {@code String} that is the value of the {@code action} URL parameter 
-     *                  to set.
-     */
-    public void setAction(String action) {
-        this.addValue(this.getUrlParametersInstance().getParamAction(), action);
-    }
-    
-    /**
-     * Convenient method to retrieve value of the parameter returned by 
      * {@link URLParameters#getParamPage()}. Equivalent to calling 
      * {@link #getFirstValue(Parameter)} for this parameter.
      * 
@@ -1213,7 +1211,28 @@ public class RequestParameters {
     public void setPage(String page) {
         this.addValue(this.getUrlParametersInstance().getParamPage(), page);
     }
-
+    /**
+     * Convenient method to retrieve value of the parameter returned by 
+     * {@link URLParameters#getParamAction()}. Equivalent to calling 
+     * {@link #getFirstValue(Parameter)} for this parameter.
+     * 
+     * @return  A {@code String} that is the value of the {@code action} URL parameter. 
+     *          Can be {@code null}. 
+     */
+    public String getAction() {
+        return this.getFirstValue(this.getUrlParametersInstance().getParamAction());
+    }
+    /**
+     * Convenient method to set value of the parameter returned by 
+     * {@link URLParameters#getParamAction()}. Equivalent to calling 
+     * {@link #addValue(Parameter, Object)} for this parameter.
+     * 
+     * @param action    A {@code String} that is the value of the {@code action} URL parameter 
+     *                  to set.
+     */
+    public void setAction(String action) {
+        this.addValue(this.getUrlParametersInstance().getParamAction(), action);
+    }
     /**
      * Convenient method to retrieve value of the parameter returned by 
      * {@link URLParameters#getParamData()}. Equivalent to calling 
@@ -1235,12 +1254,12 @@ public class RequestParameters {
     public boolean isXmlDisplayType() {
         log.entry();
         if(this.getFirstValue(this.urlParametersInstance.getParamDisplayType()) != null &&
-                this.getFirstValue(this.urlParametersInstance.getParamDisplayType()).equals("xml")){
+                this.getFirstValue(this.urlParametersInstance.getParamDisplayType()).equals(
+                        DISPLAY_TYPE_XML)){
             return log.exit(true);
         }
         return log.exit(false);
     }
-
     /**
      * This method has a js counterpart in {@code requestparameters.js} that should be kept 
      * consistent as much as possible if the method evolves.
@@ -1250,12 +1269,12 @@ public class RequestParameters {
     public boolean isCsvDisplayType() {
         log.entry();
         if(this.getFirstValue(this.urlParametersInstance.getParamDisplayType()) != null &&
-                this.getFirstValue(this.urlParametersInstance.getParamDisplayType()).equals("csv")){
+                this.getFirstValue(this.urlParametersInstance.getParamDisplayType()).equals(
+                        DISPLAY_TYPE_CSV)){
             return log.exit(true);
         }
         return log.exit(false);
     }
-
     /**
      * This method has a js counterpart in {@code requestparameters.js} that should be kept 
      * consistent as much as possible if the method evolves.
@@ -1265,7 +1284,23 @@ public class RequestParameters {
     public boolean isTsvDisplayType() {
         log.entry();
         if(this.getFirstValue(this.urlParametersInstance.getParamDisplayType()) != null &&
-                this.getFirstValue(this.urlParametersInstance.getParamDisplayType()).equals("tsv")){
+                this.getFirstValue(this.urlParametersInstance.getParamDisplayType()).equals(
+                        DISPLAY_TYPE_TSV)){
+            return log.exit(true);
+        }
+        return log.exit(false);
+    }
+    /**
+     * This method has a js counterpart in {@code requestparameters.js} that should be kept 
+     * consistent as much as possible if the method evolves.
+     * 
+     * @return  A {@code boolean} to tell whether the display is JSON or not
+     */
+    public boolean isJsonDisplayType() {
+        log.entry();
+        if(this.getFirstValue(this.urlParametersInstance.getParamDisplayType()) != null &&
+                this.getFirstValue(this.urlParametersInstance.getParamDisplayType()).equals(
+                        DISPLAY_TYPE_JSON)){
             return log.exit(true);
         }
         return log.exit(false);
@@ -1273,20 +1308,16 @@ public class RequestParameters {
 
     /**
      * Allow to know if this request has been performed through AJAX. 
-     * It is currently simply based on the fact that, in Bgee, all AJAX actions 
-     * starts by "ajax_". It should be kept that way ;)
      * 
      * This method has a js counterpart in {@code requestparameters.js} that should be kept 
      * consistent as much as possible if the method evolves.
      * 
      * @return  {@code true} if this request was performed through AJAX
      */
-    public boolean isAnAjaxRequest()
-    {
+    public boolean isAnAjaxRequest() {
         log.entry();
-        if (this.getFirstValue(this.urlParametersInstance.getParamAction()) != null &&
-                this.getFirstValue(this.urlParametersInstance.getParamAction()).toLowerCase()
-                .startsWith("ajax_")) {
+        if (this.getFirstValue(this.urlParametersInstance.getParamAjax()) != null &&
+                this.getFirstValue(this.urlParametersInstance.getParamAjax())) {
             return log.exit(true);
         }
         return log.exit(false);
@@ -1456,73 +1487,74 @@ public class RequestParameters {
 //        return log.exit(false);
 //    }
 
-    /**
-     * This method has a js counterpart in {@code requestparameters.js} that should be kept 
-     * consistent as much as possible if the method evolves.
-     * 
-     * @return  A {@code boolean} to tell whether the request corresponds to a page of the
-     * category "log"
-     */
-    public boolean isALogPageCategory()
-    {
-        log.entry();
-        if (this.getFirstValue(this.urlParametersInstance.getParamPage()) != null &&
-                this.getFirstValue(this.urlParametersInstance.getParamPage()).equals("log")) {
-            return log.exit(true);
-        }
-        return log.exit(false);
-    }
+//    /**
+//     * This method has a js counterpart in {@code requestparameters.js} that should be kept 
+//     * consistent as much as possible if the method evolves.
+//     * 
+//     * @return  A {@code boolean} to tell whether the request corresponds to a page of the
+//     * category "log"
+//     */
+//    public boolean isALogPageCategory()
+//    {
+//        log.entry();
+//        if (this.getFirstValue(this.urlParametersInstance.getParamPage()) != null &&
+//                this.getFirstValue(this.urlParametersInstance.getParamPage()).equals("log")) {
+//            return log.exit(true);
+//        }
+//        return log.exit(false);
+//    }
 
-    /**
-     * This method has a js counterpart in {@code requestparameters.js} that should be kept 
-     * consistent as much as possible if the method evolves.
-     * 
-     * @return  A {@code boolean} to tell whether the request corresponds to a page of the
-     * category "news"
-     */
-    public boolean isANewsPageCategory()
-    {
-        log.entry();
-        if (this.getFirstValue(this.urlParametersInstance.getParamPage()) != null && 
-                this.getFirstValue(this.urlParametersInstance.getParamPage()).equals("news")) {
-            return log.exit(true);
-        }
-        return log.exit(false);
-    }
+//    /**
+//     * This method has a js counterpart in {@code requestparameters.js} that should be kept 
+//     * consistent as much as possible if the method evolves.
+//     * 
+//     * @return  A {@code boolean} to tell whether the request corresponds to a page of the
+//     * category "news"
+//     */
+//    public boolean isANewsPageCategory()
+//    {
+//        log.entry();
+//        if (this.getFirstValue(this.urlParametersInstance.getParamPage()) != null && 
+//                this.getFirstValue(this.urlParametersInstance.getParamPage()).equals("news")) {
+//            return log.exit(true);
+//        }
+//        return log.exit(false);
+//    }
 
-    /**
-     * This method has a js counterpart in {@code requestparameters.js} that should be kept 
-     * consistent as much as possible if the method evolves.
-     * 
-     * @return  A {@code boolean} to tell whether the request corresponds to a page of the
-     * category "registration"
-     */
-    public boolean isARegistrationPageCategory()
-    {
-        log.entry();
-        if (this.getFirstValue(this.urlParametersInstance.getParamPage()) != null &&
-                this.getFirstValue(this.urlParametersInstance.getParamPage()).equals("registration")) {
-            return log.exit(true);
-        }
-        return log.exit(false);
-    }
+//    /**
+//     * This method has a js counterpart in {@code requestparameters.js} that should be kept 
+//     * consistent as much as possible if the method evolves.
+//     * 
+//     * @return  A {@code boolean} to tell whether the request corresponds to a page of the
+//     * category "registration"
+//     */
+//    public boolean isARegistrationPageCategory()
+//    {
+//        log.entry();
+//        if (this.getFirstValue(this.urlParametersInstance.getParamPage()) != null &&
+//                this.getFirstValue(this.urlParametersInstance.getParamPage()).equals("registration")) {
+//            return log.exit(true);
+//        }
+//        return log.exit(false);
+//    }
 
-    /**
-     * This method has a js counterpart in {@code requestparameters.js} that should be kept 
-     * consistent as much as possible if the method evolves.
-     * 
-     * @return  A {@code boolean} to tell whether the request corresponds to a page of the
-     * category "search"
-     */
-    public boolean isASearchPageCategory()
-    {
-        log.entry();
-        if (this.getFirstValue(this.urlParametersInstance.getParamPage()) != null && 
-                this.getFirstValue(this.urlParametersInstance.getParamPage()).equals("search")) {
-            return log.exit(true);
-        }
-        return log.exit(false);
-    }
+//    /**
+//     * This method has a js counterpart in {@code requestparameters.js} that should be kept 
+//     * consistent as much as possible if the method evolves.
+//     * 
+//     * @return  A {@code boolean} to tell whether the request corresponds to a page of the
+//     * category "search"
+//     */
+//    public boolean isASearchPageCategory()
+//    {
+//        log.entry();
+//        if (this.getFirstValue(this.urlParametersInstance.getParamPage()) != null && 
+//                this.getFirstValue(this.urlParametersInstance.getParamPage()).equals("search")) {
+//            return log.exit(true);
+//        }
+//        return log.exit(false);
+//    }
+
 
     /**
      * Determine whether the requested page contains sensitive information, 
@@ -1537,9 +1569,7 @@ public class RequestParameters {
     public boolean isASecuredPage() 
     {
         log.entry();
-        if (this.isALogPageCategory() || this.isARegistrationPageCategory()) {
-            return log.exit(true);
-        }
+        //TODO: implement when necessary (logging page, registration page, ...)
         return log.exit(false);
     }
 
@@ -1588,7 +1618,7 @@ public class RequestParameters {
      *         have failed.
      * @throws WrongFormatException The {@code String} to secure does not fit the requirement
      */
-    public String secureString(String stringToCheck) throws WrongFormatException
+    private String secureString(String stringToCheck) throws WrongFormatException
     {
         return secureString(stringToCheck, 0, null);
     }
@@ -1617,7 +1647,7 @@ public class RequestParameters {
      *
      *              
      */
-    public String secureString(String stringToCheck, int lengthToCheck, String format)
+    private String secureString(String stringToCheck, int lengthToCheck, String format)
             throws WrongFormatException
     {
         log.entry(stringToCheck, lengthToCheck, format);
@@ -1647,51 +1677,50 @@ public class RequestParameters {
      * @throws WrongFormatException The {@code String} to secure does not fit the requirement
      * @see #secureString(String)
      */
-    public String secureStringWithoutLengthCheck(String stringToCheck) throws WrongFormatException
+    private String secureStringWithoutLengthCheck(String stringToCheck) throws WrongFormatException
     {
         return secureString(stringToCheck, 0, null);
     }
 
     /**
-     * Perform security controls on the submitted {@code String} and transform it to a boolean.
+     * Transform {@code paramValue} into a {@code boolean}. This {@code String} should first 
+     * have been secured (see {@link #secureString(String, int, String)}).
      * 
-     * @param stringToCheck a {@code String} to be checked 
-     * @return  a {@code boolean} corresponding to the {@code stringToCheck}. 
-     *          Return also {@code false} if {@code stringToCheck} was null, empty,
-     *          or not secured.
-     * @throws WrongFormatException The {@code String} to secure does not fit the requirement
+     * @param paramValue    A {@code String} corresponding to the value of a parameter 
+     *                      in a request, to be converted into a {@code boolean}
+     * @return  a {@code boolean} corresponding to {@code paramValue}. 
+     *          Return {@code true} if {@code paramValue} is equal to "on", "true", or "1".
      */
-    public boolean secureStringAndCastToBoolean(String stringToCheck) throws WrongFormatException
-    {
-        log.entry(stringToCheck);
-        String tempStringToCheck = secureString(stringToCheck);
+    private boolean castToBoolean(String paramValue) {
+        log.entry(paramValue);
 
-        if (tempStringToCheck.equalsIgnoreCase("on") || 
-                tempStringToCheck.equalsIgnoreCase("true")) {
+        if (paramValue.equalsIgnoreCase("on") || 
+                paramValue.equalsIgnoreCase("true") || 
+                paramValue.equalsIgnoreCase("1")) {
             return log.exit(true);
         }
         return log.exit(false);
     }
-
     /**
-     * Perform security controls on the submitted {@code String} and transform it to an int.
+     * Transform {@code paramValue} into an {@code int}. This {@code String} should first 
+     * have been secured (see {@link #secureString(String, int, String)}).
      * 
-     * @param stringToCheck a {@code String} to be checked 
-     * @return  an {@code int} corresponding to the {@code stringToCheck}. 
-     *          Return also 0 if {@code stringToCheck} was null, empty, or not secured.
-     * @throws WrongFormatException The {@code String} to secure does not fit the requirement
+     * @param paramValue    A {@code String} corresponding to the value of a parameter 
+     *                      in a request, to be converted into an {@code int}
+     * @return  an {@code int} corresponding to {@code paramValue}. 
+     *          Return also 0 if {@code paramValue} is {@code null} or blank.
+     * @throws WrongFormatException If {@code paramValue} could not be casted to an {@code int}.
      */
-    public int secureStringAndCastToInt(String stringToCheck) throws WrongFormatException
-    {
-        log.entry(stringToCheck);
-        String tempStringToCheck = secureString(stringToCheck);
+    private int castToInt(String paramValue) throws WrongFormatException {
+        log.entry(paramValue);
 
         int castInt = 0;
-        if (StringUtils.isNotBlank(tempStringToCheck)) {
+        if (StringUtils.isNotBlank(paramValue)) {
             try {
-                castInt = Integer.parseInt(tempStringToCheck);
+                castInt = Integer.parseInt(paramValue);
             } catch(NumberFormatException e) {
-                castInt = 0;
+                throw log.throwing(new WrongFormatException(
+                        "Incorrect integer value: " + paramValue, e));
             }
         }
         return log.exit(castInt);
