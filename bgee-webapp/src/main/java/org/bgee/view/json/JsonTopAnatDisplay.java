@@ -35,8 +35,12 @@ public class JsonTopAnatDisplay extends JsonParentDisplay implements TopAnatDisp
 
     @Override
     public void displayTopAnatPage() {
-        // TODO Auto-generated method stub
+        log.entry();
+        this.sendHeaders();
         
+        this.write("{\"title\": \"AJAX test for topAnat in JSON succeeded.\"}");
+        
+        log.exit();
     }
     
 }

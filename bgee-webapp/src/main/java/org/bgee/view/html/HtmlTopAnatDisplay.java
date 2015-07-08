@@ -48,7 +48,11 @@ public class HtmlTopAnatDisplay extends HtmlParentDisplay implements TopAnatDisp
         this.startDisplay("topAnat: enrichment of gene expression localization");
         
         //AngularJs container
-        this.writeln("<div ng-app='phonecatApp' ng-controller='PhoneListCtrl'>");
+        this.writeln("<div ng-app='angularBasicTest'><!-- AngularJs container -->");
+        
+        //First basic AngularJS test
+        this.writeln("<div ng-controller='PhoneListCtrl'>"
+                + "<!-- First basic AngularJS test container-->");
         
         this.writeln("<p>Query input is: {{query}}</p>");
         
@@ -73,7 +77,18 @@ public class HtmlTopAnatDisplay extends HtmlParentDisplay implements TopAnatDisp
         this.writeln("</div>");       //end div class='row'
         this.writeln("</div>");   //end div class='container-fluid'
         
-        this.writeln("</div>"); //end AngularJs container
+        this.writeln("</div>"
+            + "<!-- End First basic AngularJS test container-->"); //end First basic AngularJS test
+        
+        //AngularJs AJAX test container.
+        this.writeln("<!-- Example from http://tutorials.jenkov.com/angularjs/ajax.html -->");
+        this.writeln("<div ng-controller='ajaxTestCtrl'>");
+        this.writeln("<button ng-click='myData.doClick(item, $event)'>Send AJAX Request</button>"
+                + "<br/>"
+                + "Data from server: {{myData.fromServer}}");
+        this.writeln("</div>"); //end AngularJs AJAX test container
+
+        this.writeln("</div><!-- End AngularJs container -->"); //AngularJs container
 
         this.endDisplay();
         
