@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<title>topAnat: enrichment of gene expression localization</title>
+<meta name='description' content='Bgee allows to automatically compare gene expression patterns between species, by referencing expression data on anatomical ontologies, and designing homology relationships between them.'/>
+<meta name='keywords' content='bgee, gene expression, evolution, ontology, anatomy, development, evo-devo database, anatomical ontology, developmental ontology, gene expression evolution'/>
+<meta name='dcterms.rights' content='Bgee copyright 2007/2015 UNIL' />
+<link rel='shortcut icon' type='image/x-icon' href='../../img/favicon.ico'/>
+<link rel='stylesheet' type='text/css' href='../../css/bgee.css'/>
+<link rel='stylesheet' type='text/css' href='../../css/topanat.css'/>
+<script type='text/javascript' src='../../js/lib/jquery.min.js'></script>
+<script type='text/javascript' src='../../js/lib/jquery.visible.js'></script>
+<script type='text/javascript' src='../../js/lib/jquery-ui.min.js'></script>
+<script type='text/javascript' src='../../js/lib/angular.min.js'></script>
+<script type='text/javascript' src='../../js/bgeeproperties.js'></script>
+<script type='text/javascript' src='../../js/urlparameters.js'></script>
+<script type='text/javascript' src='../../js/requestparameters.js'></script>
+<script type='text/javascript' src='../../js/common.js'></script>
+<script type='text/javascript' src='params_for_static_pages.js'></script>
+<script type='text/javascript' src='test_ajax_server.js'></script>
+<script type='text/javascript' src='../../js/topanat.js'></script>
+</head>
+<body>
+<noscript>Sorry, your browser does not support JavaScript!</noscript>
+<div id='bgee_top'><span id='TOP'></span></div>
+<div id='sib_container'>
+<header>
+<a href='/topanat-dev/' title='Go to Bgee home page'>
+<img id='sib_other_logo' src='../../img/logo/bgee13_logo.png' alt='Bgee logo' />
+</a>
+<h1>Bgee: Gene Expression Evolution</h1>
+<a href='http://www.isb-sib.ch/' target='_blank' title='Link to the SIB Swiss Institute of Bioinformatics'>
+<img id='sib_logo' src='../../img/logo/sib_logo.png' alt='SIB Swiss Institute of Bioinformatics' />
+</a>
+<div id='nav'><ul id='bgee_links'><li><a title='Expression data page' href='?page=download'>Expression data<img class='deploy' src='../../img/arrow_down_dark.png' alt='Deploy'/></a><ul><li><a class='drop' title='Gene expression calls' href='?page=download&amp;action=expr_calls'>Gene expression calls</a></li><li><a class='drop' title='Processed expression values' href='?page=download&amp;action=proc_values'>Processed expression values</a></li></ul></li><li><a title='Documentation page' href='?page=doc'>Documentation<img class='deploy' src='../../img/arrow_down_dark.png' alt='Deploy'/></a><ul><li><a class='drop' title='See how to access to Bgee data' href='?page=doc&amp;action=access'>How to access Bgee data</a></li><li><a class='drop' title='' href='?page=doc&amp;action=call_files'>Expression call file documentation</a></li></ul></li><li id='help'><script type='text/javascript'>eval(unescape('%66%75%6E%63%74%69%6F%6E%20%73%65%62%5F%74%72%61%6E%73%70%6F%73%65%32%28%68%29%20%7B%76%61%72%20%73%3D%27%61%6D%6C%69%6F%74%42%3A%65%67%40%65%73%69%2D%62%69%73%2E%62%68%63%27%3B%76%61%72%20%72%3D%27%27%3B%66%6F%72%28%76%61%72%20%69%3D%30%3B%69%3C%73%2E%6C%65%6E%67%74%68%3B%69%2B%2B%2C%69%2B%2B%29%7B%72%3D%72%2B%73%2E%73%75%62%73%74%72%69%6E%67%28%69%2B%31%2C%69%2B%32%29%2B%73%2E%73%75%62%73%74%72%69%6E%67%28%69%2C%69%2B%31%29%7D%68%2E%68%72%65%66%3D%72%3B%7D%64%6F%63%75%6D%65%6E%74%2E%77%72%69%74%65%28%27%3C%61%20%68%72%65%66%3D%22%23%22%20%6F%6E%4D%6F%75%73%65%4F%76%65%72%3D%22%6A%61%76%61%73%63%72%69%70%74%3A%73%65%62%5F%74%72%61%6E%73%70%6F%73%65%32%28%74%68%69%73%29%22%20%6F%6E%46%6F%63%75%73%3D%22%6A%61%76%61%73%63%72%69%70%74%3A%73%65%62%5F%74%72%61%6E%73%70%6F%73%65%32%28%74%68%69%73%29%22%3E%48%65%6C%70%3C%2F%61%3E%27%29%3B'));</script></li></ul><ul id='social_links'><li><a id='twitter' class='social-link' title='See @Bgeedb account' target='_blank' href='https://twitter.com/Bgeedb'><img alt='Twitter logo' src='../../img/Twitter.png'></a></li><li><a id='wordpress' class='social-link' title='See our blog' target='_blank' href='https://bgeedb.wordpress.com'><img alt='Wordpress logo' src='../../img/wordpress.png'></a></li></ul></div>
+</header>
+<div id='sib_body'>
+<div ng-app='angularBasicTest'><!-- AngularJs container -->
+<div ng-controller='PhoneListCtrl'><!-- First basic AngularJS test container-->
+<p>Query input is: {{query}}</p>
+<div class='container-fluid'>
+<div class='row'>
+<div class='col-md-2'><!--Sidebar content-->Search: <input ng-model='query'></div>
+<div class='col-md-10'><!--Body content--><ul class='phones'><li ng-repeat='phone in phones | filter:query'><span>{{phone.name}}</span><p>{{phone.snippet}}</p></li></ul></div>
+</div>
+</div>
+</div><!-- End First basic AngularJS test container-->
+<!-- Example from http://tutorials.jenkov.com/angularjs/ajax.html -->
+<div ng-controller='ajaxTestCtrl'>
+<button ng-click='myData.doClick(item, $event)'>Send AJAX Request</button><br/>Data from server: {{myData.fromServer}}
+</div>
+</div><!-- End AngularJs container -->
+</div>
+<footer>
+<div id='sib_footer_content'>
+<a href='http://www.isb-sib.ch'>SIB Swiss Institute of Bioinformatics</a>
+<div id='sib_footer_right'>
+<a href='#TOP' id='sib_footer_gototop'><span style='padding-left: 10px'>Back to the Top</span></a>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>
+
