@@ -83,6 +83,9 @@
              maven-antrun-plugin. The files will be copied in a temp directory, 
              and added by maven-war-plugin to the WAR file in the standard directory. -->
         <rename.tmp.directory>${project.build.directory}/rename_tmp</rename.tmp.directory>
+        <!-- add a property finalName, to be able to change the name of the WAR file built 
+             from command line -->
+        <finalName>topanat-dev</finalName>
     </properties>
     
     <!-- There is a problem when running the webapp from Eclipse: m2e-wtp acquires 
@@ -112,7 +115,7 @@
       
       
     <build>
-        <finalName>bgee-webapp-${project.version}</finalName>
+        <finalName>${finalName}</finalName>
         
         <plugins>
         
