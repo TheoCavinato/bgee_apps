@@ -19,6 +19,10 @@
 <script type='text/javascript' src='../../js/common.js'></script>
 <script type='text/javascript' src='static_page_params.js'></script>
 <script>
+//this setting would not be needed if the page was accessed 
+//through a server on your localhost, but is is needed if you access it 
+//from file system. Because of this setting, this page will not work 
+//if accessed from a server that is not on your localhost (e.g., test server).
 GLOBAL_PROPS.setBgeeHost('localhost:8080');
 </script>
 <script type='text/javascript' src='../../js/topanat.js'></script>

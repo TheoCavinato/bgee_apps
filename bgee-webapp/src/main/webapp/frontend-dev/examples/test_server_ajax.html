@@ -19,6 +19,11 @@
 <script type='text/javascript' src='../../js/common.js'></script>
 <script type='text/javascript' src='static_page_params.js'></script>
 <script>
+//this setting would not be needed if the page was accessed directly through 
+//http://altbgee.unil.ch/topanat-dev/frontend-dev/examples/test_server_ajax.html, 
+//but is is needed if you access it from file system, or from any other server, 
+//such as your localhost. This can work only because cross-domain AJAX queries 
+//from any origin has been enabled.
 GLOBAL_PROPS.setBgeeHost('altbgee.unil.ch');
 </script>
 <script type='text/javascript' src='../../js/topanat.js'></script>
